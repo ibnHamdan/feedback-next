@@ -1,28 +1,30 @@
 
 import { useAuth } from "@/lib/auth";
 
-import { Button, Heading, Text, Code } from "@chakra-ui/react"
-
+import { Button, Heading, Text, Code, Flex, Icon } from "@chakra-ui/react"
+import { CalendarIcon} from '@chakra-ui/icons'
 export default function Home() {
   const auth = useAuth();
   return (
-    <div >
+    <Flex
+      as="main"
+      direction="column"
+      align="center"
+      justify="center"
+      h="100vh"
+    >
 
-
-      <main >
+    
         <Heading fontWeight="600">
-         Fast Feedback 
+         <title>Fast Feedback </title> 
         </Heading>
-
-        <Text> Current user: <Code>{auth?.user?.email}</Code></Text>
-        {auth.user ? (
-          <Button onClick={(e) => auth.signout()}>Sign Out</Button>
-        ): (
-          <Button onClick={(e) => auth.signinWithGitHub()}>Sign In</Button>
-        )}
+        <CalendarIcon w={16} h={16} color="black" ></CalendarIcon>
         
-      </main>
-
-     </div>
+        {auth.user ? (
+          <Button  mt={4} size="sm" onClick={(e) => auth.signout()}>Sign Out</Button>
+        ): (
+          <Button mt={4} size="sm" onClick={(e) => auth.signinWithGitHub()}>Sign In</Button>
+        )}
+    </Flex>
   )
 }

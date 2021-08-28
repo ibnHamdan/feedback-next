@@ -18,6 +18,6 @@ const fontWeights = {
   medium: 600,
   bold: 700
 }
-const theme = extendTheme({ colors, fonts })
+const theme = extendTheme({ fonts, fontWeights })
 
 export default theme; 
