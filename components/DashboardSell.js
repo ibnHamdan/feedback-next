@@ -1,10 +1,10 @@
 import { CalendarIcon } from "@chakra-ui/icons"
-import { Avatar, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Heading, Icon, Link, Stack } from "@chakra-ui/react"
+import { Avatar, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Heading, Icon, Link, Stack } from "@chakra-ui/react"
 import { useAuth } from "../lib/auth"
+import  AddSiteModal  from "@/components/AddSiteModel";
 
 const DashboardShell = ({children}) =>  {
   const auth = useAuth();
-  console.log(auth.user)
   return (
   <Flex flexDirection="column">
     <Flex
@@ -20,7 +20,7 @@ const DashboardShell = ({children}) =>  {
       </Stack>
       <Flex alignItems="center">
         <Link mr={4}>Acconts</Link>
-        <Avatar size="sm" src={auth.user.photoURL}/>
+        <Avatar size="sm" src={auth?.user?.photoURL}/>
       </Flex>
       </Flex>
       <Flex backgroundColor="gray.100" p={12} h="100vh" height="100vh">
@@ -37,7 +37,12 @@ const DashboardShell = ({children}) =>  {
               <BreadcrumbLink color="gray.7--">Sites</BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
+          <Flex justifyContent="space-between">
           <Heading color="black" mb={4}>Sites</Heading>
+          
+          <AddSiteModal>+ Add Site</AddSiteModal>
+          </Flex>
+          
           {children}
         </Flex>
       </Flex>
