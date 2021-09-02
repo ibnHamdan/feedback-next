@@ -16,6 +16,11 @@ export default function Home() {
 
     
         <Heading fontWeight="600">
+        <script dangerouslySetInnerHTML={{ __html: `
+          if (document.cookie && document.cookie.includes('authed')) {
+            window.location.href = "/dashboard"
+          }
+        ` }} />
          <title>Fast Feedback </title> 
         </Heading>
         <CalendarIcon w={16} h={16} color="black" ></CalendarIcon>
