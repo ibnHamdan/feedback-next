@@ -7,9 +7,9 @@ import { Table } from "../components/Table";
 import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
 const Dashboard = () => {
-  const auth = useAuth();
-  const { data } = useSWR('/api/sites', fetcher);
-
+  const {user} = useAuth();
+  const { data } = useSWR(user ? ['/api/sites', user._lat] : null , fetcher);
+  
   if(!data) {
     return (
       <DashboardShell>
