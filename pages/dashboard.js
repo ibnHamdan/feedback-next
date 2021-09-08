@@ -6,13 +6,16 @@ import { useAuth } from "../lib/auth"
 import { Table } from "../components/Table";
 import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
+import SiteTableHeader from "../components/SiteTableHeader";
 const Dashboard = () => {
+
   const {user} = useAuth();
   const { data } = useSWR(user ? ['/api/sites', user._lat] : null , fetcher);
   
   if(!data) {
     return (
       <DashboardShell>
+        <SiteTableHeader />
         <SiteTableSkeleton /> 
       </DashboardShell>
     )
@@ -20,6 +23,7 @@ const Dashboard = () => {
 
   return (
     <DashboardShell>
+      <SiteTableHeader />
       {data.sites ? <SiteTable sites={data.sites} /> : <EmptyState /> }
     </DashboardShell>
   )
