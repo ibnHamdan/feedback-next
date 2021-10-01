@@ -1,33 +1,46 @@
 import EmptyState from "../components/EmptyState";
 import SiteTableSkeleton from "../components/SiteTableSkeleton";
-import DashboardShell  from "../components/DashboardSell";
-import SiteTable  from "../components/SiteTable";
-import { useAuth } from "../lib/auth"
+import DashboardShell from "../components/DashboardSell";
+import SiteTable from "../components/SiteTable";
+import { useAuth } from "../lib/auth";
 import { Table } from "../components/Table";
 import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
 import SiteTableHeader from "../components/SiteTableHeader";
+import Page from "@/components/Page";
 const Dashboard = () => {
+  const { user } = useAuth();
+  const { data } = useSWR(user ? ["/api/sites", user._lat] : null, fetcher);
 
-  const {user} = useAuth();
-  const { data } = useSWR(user ? ['/api/sites', user._lat] : null , fetcher);
-  
-  if(!data) {
+  if (!data) {
     return (
       <DashboardShell>
         <SiteTableHeader />
-        <SiteTableSkeleton /> 
+        <SiteTableSkeleton />
       </DashboardShell>
-    )
+    );
+  }
+  if (data.sites.length) {
+    return (
+      <DashboardShell>
+        <SiteTableHeader />
+        {data.sites ? <SiteTable sites={data.sites} /> : <EmptyState />}
+      </DashboardShell>
+    );
   }
 
   return (
     <DashboardShell>
       <SiteTableHeader />
-      {data.sites ? <SiteTable sites={data.sites} /> : <EmptyState /> }
+      <EmptyState />
     </DashboardShell>
-  )
-} 
+  );
+};
 
+const DashboardPage = () => (
+  <Page name="dashboard" path="/dashboard">
+    <Dashboard />
+  </Page>
+);
 
-export default Dashboard;
+export default DashboardPage;

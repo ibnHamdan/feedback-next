@@ -1,78 +1,69 @@
 import Feedback from "@/components/Feedback";
 import { useAuth } from "@/lib/auth";
 import { getAllFeedback, getAllSites } from "@/lib/db-admin";
-import { Box, FormControl, FormHelperText, FormLabel, Input, Button } from "@chakra-ui/react"
+import { Box, FormControl, FormHelperText, FormLabel, Input, Button } from "@chakra-ui/react";
 import { Router, useRouter } from "next/dist/client/router";
 import { useRef, useState } from "react";
 import { createFeedback } from "@/lib/db";
 
 export async function getStaticProps(context) {
   const siteId = context.params.siteId;
-  const {feedback} = await getAllFeedback(siteId);
+  const { feedback } = await getAllFeedback(siteId);
   return {
     props: {
-      initialFeedback: feedback
+      initialFeedback: feedback,
     },
-    revalidate: 1
-  }
-}
-
-export async function getStaticPaths(context) {
-  const {sites} = await getAllSites();
-  const paths = sites.map((site) => ({
-    params: {
-      siteId: site.id.toString(),
-    }
-  }))
-  return {
-    paths,
-    fallback:  false, 
+    revalidate: 1,
   };
 }
 
-const SiteFeedback= ({ initialFeedback}) => {
+export async function getStaticPaths(context) {
+  const { sites } = await getAllSites();
+  const paths = sites.map((site) => ({
+    params: {
+      siteId: site.id.toString(),
+    },
+  }));
+  return {
+    paths,
+    fallback: true,
+  };
+}
+
+const SiteFeedback = ({ initialFeedback }) => {
   const auth = useAuth();
-  const router = useRouter()
+  const router = useRouter();
   const inputEl = useRef(null);
-  const [allFeedback, setAllFeedback] = useState(initialFeedback)
+  const [allFeedback, setAllFeedback] = useState(initialFeedback);
   const onSubmit = (e) => {
     e.preventDefault();
-    const newFeedback= {
+    const newFeedback = {
       author: auth.user.displayName,
       authorId: auth.user.uid,
       siteId: router.query.siteId,
       text: inputEl.current.value,
       createdAt: new Date().toISOString(),
       //provider: auth.user.provider,
-      status: 'pending',
-    }
-    setAllFeedback([newFeedback,...allFeedback])
-    createFeedback(newFeedback)
-  }
-  return(
-
-  
-  
-  <Box 
-    display="flex" 
-    flexDirection="column" 
-    w="full" 
-    maxW="700px" 
-    margin=" 0 auto">
-    <Box as="form" onSubmit={onSubmit}>
-    <FormControl my={8} id="email">
-      <FormLabel>Comment</FormLabel>
-      <Input ref={inputEl} type="comment" id="comment" />
-      <Button mt={2} type="submit" fontWeight="md">Add comment</Button>
-      </FormControl>
-    </Box>
-    { allFeedback.map(feedback => (
-       <Feedback key={feedback.id} {...feedback}/>
-    
-    ))}
-    </Box>
-    )
+      status: "pending",
     };
-
+    inputEl.current.value = "";
+    setAllFeedback([newFeedback, ...allFeedback]);
+    createFeedback(newFeedback);
+  };
+  return (
+    <Box display="flex" flexDirection="column" w="full" maxW="700px" margin=" 0 auto">
+      <Box as="form" onSubmit={onSubmit}>
+        <FormControl my={8} id="email">
+          <FormLabel>Comment</FormLabel>
+          <Input ref={inputEl} type="comment" id="comment" />
+          <Button mt={2} type="submit" fontWeight="md" isDisabled={router.isFallback}>
+            Add comment
+          </Button>
+        </FormControl>
+      </Box>
+      {allFeedback && allFeedback.map((feedback) => <Feedback key={feedback.id} {...feedback} />)}
+    </Box>
+  );
+};
 
 export default SiteFeedback;

@@ -16,6 +16,7 @@ import NextLink from "next/link";
 
 const DashboardShell = ({ children }) => {
   const auth = useAuth();
+
   return (
     <Flex flexDirection="column">
       <Flex backgroundColor="white" alignItems="center" justifyContent="space-between" p={4}>
