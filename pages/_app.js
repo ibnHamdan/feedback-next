@@ -19,7 +19,7 @@ const GlobalStyle = ({ children }) => {
           #__next {
             display: flex;
             flex-direction: column;
-            min-hight: 100vh;
+            min-height: 100vh;
           }
         `}
       />

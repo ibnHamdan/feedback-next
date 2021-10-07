@@ -19,12 +19,19 @@ const RemoveButton = ({ feedbackId }) => {
   const cancelRef = React.useRef();
   const auth = useAuth();
   const onDelete = () => {
-    //deleteFeedback(feedbackId);
+    deleteFeedback(feedbackId);
     mutate(
       ["/api/feedback", auth.user._lat],
       async (data) => {
+        console.log("removed ", data);
+        if (data) {
+          return {
+            feedback: data.feedback.filter((feedback) => feedback.id !== feedbackId),
+          };
+        }
+        console.log("removed no data");
         return {
-          feedback: data.feedback.filter((feedback) => feedback.id !== feedbackId),
+          feedback: null,
         };
       },
       false
