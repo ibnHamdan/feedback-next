@@ -8,8 +8,8 @@ import { createFeedback } from "@/lib/db";
 import DashboardShell from "@/components/DashboardSell";
 
 export async function getStaticProps(context) {
-  const siteId = context.params.siteId;
-  const { feedback } = await getAllFeedback(siteId);
+  const [siteId, route] = context.params.site;
+  const { feedback } = await getAllFeedback(siteId, route);
   return {
     props: {
       initialFeedback: feedback,
